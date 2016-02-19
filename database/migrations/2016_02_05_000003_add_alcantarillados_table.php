@@ -13,12 +13,12 @@ class AddAlcantarilladosTable extends Migration
     public function up()
     {
         Schema::create('alcantarillados', function (Blueprint $table) {
-            $table->increments('idAlcantarillado');
-            $table->integer('idUsuario')->unsigned();
+            $table->increments('id');
+            $table->integer('usuario_id')->unsigned();
             $table->char('estado',1)->default('0');
             $table->timestamps();
 
-            $table->foreign('idUsuario')->references('idUsuario')->on('usuarios')->onDelete('cascade');
+            $table->foreign('usuario_id')->references('id')->on('usuarios')->onDelete('cascade');
         });
     }
 

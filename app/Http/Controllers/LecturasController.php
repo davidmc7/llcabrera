@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Laracasts\Flash\Flash;
+use App\Socio;
+use App\Tarifa;
+use App\Lectura;
 
 class LecturasController extends Controller
 {
@@ -14,9 +18,24 @@ class LecturasController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $lecturasAnteriores = Lectura::BuscarSocioLecturasAnteriores($request->socio_id)->orderBy('id', 'ASC')->get();
+        $lecturasActuales = Lectura::BuscarSocioLecturasActuales($request->socio_id)->orderBy('id', 'ASC')->get();
+
+        $socio = Socio::find($request->socio_id);
+        $tarifa = Tarifa::find($socio->categoria_id);
+
+        /*$lecturas->each(function($lecturas){
+            $lecturas->socio;
+            $lecturas->tarifa;
+        });*/
+        
+        return view('usuario.lectura.index')
+                ->with('socio', $socio)
+                ->with('tarifa', $tarifa)
+                ->with('lecturasAnteriores', $lecturasAnteriores)
+                ->with('lecturasActuales', $lecturasActuales);
     }
 
     /**
@@ -26,7 +45,7 @@ class LecturasController extends Controller
      */
     public function create()
     {
-        return view('users.lectura.create');
+        return view('usuario.lectura.create');
     }
 
     /**

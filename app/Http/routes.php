@@ -12,32 +12,52 @@
 */
 
 Route::get('/', function () { return view('login');});
-Route::get('login', 'PagesController@login');
+Route::get('login', function () { return view('login');});
 
 Route::group(['prefix' => 'admin'],function(){
+	Route::resource('usuarios','UsuariosController');
+	Route::resource('categorias','CategoriasController');
+	Route::resource('tarifas','TarifasController');
+	Route::resource('comisiones','ComisionesController');
+	
 	Route::resource('aportesocios','AporteSociosController');
 	Route::resource('aportes','AportesController');
-	Route::resource('parametros','ParametrosController');
-	Route::resource('tarifas','TarifasController');
-	Route::resource('tiposocios','TipoSociosController');
-	Route::resource('users','UsersController');
+	
+	
+	Route::get('usuarios/{id}/destroy',[
+		'uses' => 'UsuariosController@destroy',
+		'as'   => 'admin.usuarios.destroy'
+	]);
+	Route::get('aportes/{id}/destroy',[
+		'uses' => 'AportesController@destroy',
+		'as'   => 'admin.aportes.destroy'
+	]);
+	Route::get('categorias/{id}/destroy',[
+		'uses' => 'CategoriasController@destroy',
+		'as'   => 'admin.tiposocios.destroy'
+	]);
+	Route::get('tarifas/{id}/destroy',[
+		'uses' => 'TarifasController@destroy',
+		'as'   => 'admin.tarifas.destroy'
+	]);
+
+	Route::get('comisiones/{id}/destroy',[
+		'uses' => 'ComisionesController@destroy',
+		'as'   => 'admin.comisiones.destroy'
+	]);
+
+	Route::get('principal','PagesController@principal');
+	Route::get('parametros','ParametrosController@principal');
 
 });
 
 Route::group(['prefix' => 'user'],function(){
-	Route::resource('cobros','CobrosController');
-	Route::resource('lecturas','LecturasController');
 	Route::resource('socios','SociosController');
-
+	Route::resource('lecturas','LecturasController');
+	Route::resource('cobros','CobrosController');
+	
+	Route::get('socios/{id}/destroy',[
+		'uses' => 'SociosController@destroy',
+		'as'   => 'user.socios.destroy'
+	]);
 });
-
-/*
-Route::get('bienvenida', 'PagesController@bienvenida');
-Route::get('socio', 'PagesController@socio');
-Route::get('lecturar', 'PagesController@lecturar');
-Route::get('cobrar', 'PagesController@cobrar');
-Route::get('informes', 'PagesController@informes');
-Route::get('admin', 'PagesController@admin');
-Route::get('parametros', 'PagesController@parametros');
-
-*/

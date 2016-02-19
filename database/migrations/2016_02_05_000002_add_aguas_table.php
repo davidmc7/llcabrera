@@ -13,8 +13,8 @@ class AddAguasTable extends Migration
     public function up()
     {
         Schema::create('aguas', function (Blueprint $table) {
-            $table->increments('idAgua');
-            $table->integer('idUsuario')->unsigned();
+            $table->increments('id');
+            $table->integer('usuario_id')->unsigned();
 
             $table->string('numeroMe',15);
             $table->decimal('lecturaMe',10,2);
@@ -28,10 +28,10 @@ class AddAguasTable extends Migration
             $table->string('hubicacionCa',15);
             $table->string('estadoCa',15);
             $table->string('profundidadCa',15);
-            $table->char('estado',1)->default('0');
+            $table->char('estado',1)->default('1');
             $table->timestamps();
 
-            $table->foreign('idUsuario')->references('idUsuario')->on('usuarios')->onDelete('cascade');
+            $table->foreign('usuario_id')->references('id')->on('usuarios')->onDelete('cascade');
         });
     }
 

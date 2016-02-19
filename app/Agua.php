@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Agua extends Model
 {
     protected $table = "aguas";
-    protected $fillable = ['idUsuario', 'numeroMe', 'lecturaMe', 'DiametroMe', 'estadoMe', 'caracteristicaCo', 'diametroCo', 'materialCo', 'situacionCo', 'fugaCo', 'hubicacionCa', 'estadoCa', 'profundidadCa', 'estado'];
+    protected $fillable = ['usuario_id', 'numeroMe', 'lecturaMe', 'DiametroMe', 'estadoMe', 'caracteristicaCo', 'diametroCo', 'materialCo', 'situacionCo', 'fugaCo', 'hubicacionCa', 'estadoCa', 'profundidadCa', 'estado'];
 
     /**
     * belongsTo('App\Category') //para llaves foraneas de la objeto
@@ -16,10 +16,10 @@ class Agua extends Model
 
 
     public function usuario(){
-    	return this->belongsTo('App\Usuario');
+    	return $this->belongsTo('App\Usuario');
     }
 
     public function socios(){
-        return this->hasMany('App\Socio');
+        return $this->hasMany('App\Socio');
     }
 }

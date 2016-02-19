@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Alcantarillado extends Model
 {
     protected $table = "alcantarillados";
-    protected $fillable = ['idUsuario', 'estado'];
+    protected $fillable = ['usuario_id', 'estado'];
 
     /**
     * belongsTo('App\Category') //para llaves foraneas de la objeto
@@ -16,10 +16,10 @@ class Alcantarillado extends Model
 
 
     public function usuario(){
-    	return this->belongsTo('App\Usuario');
+    	return $this->belongsTo('App\Usuario');
     }
 
     public function socios(){
-    	return this->hasMany('App\Socio');
+    	return $this->hasMany('App\Socio');
     }
 }

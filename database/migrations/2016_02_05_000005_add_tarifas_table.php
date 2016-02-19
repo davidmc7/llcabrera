@@ -13,20 +13,21 @@ class AddTarifasTable extends Migration
     public function up()
     {
         Schema::create('tarifas', function (Blueprint $table) {
-            $table->increments('idTarifa');
-            $table->integer('idUsuario')->unsigned();
-            $table->integer('idTipoSocio')->unsigned();
+            $table->increments('id');
+            $table->integer('usuario_id')->unsigned();
+            $table->integer('categoria_id')->unsigned();
             
             $table->string('nombre',20);
             $table->decimal('montoMts3',10,2)->default(0.00);
             $table->decimal('montoBs',10,2)->default(0.00);
+            $table->decimal('consumoMinimo',10,2)->default(0.00);
             $table->tinyInteger('mesIni');
             $table->tinyInteger('mesFin');
             $table->smallInteger('anio');
             $table->timestamps();
 
-            $table->foreign('idUsuario')->references('idusuario')->on('usuarios')->onDelete('cascade');
-            $table->foreign('idTipoSocio')->references('idTipoSocio')->on('tiposocios')->onDelete('cascade');
+            $table->foreign('usuario_id')->references('id')->on('usuarios')->onDelete('cascade');
+            $table->foreign('categoria_id')->references('id')->on('categorias')->onDelete('cascade');
         });
     }
 

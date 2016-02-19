@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Laracasts\Flash\Flash;
+use App\Categoria;
+use App\Aporte;
 
 class AportesController extends Controller
 {
@@ -16,7 +19,9 @@ class AportesController extends Controller
      */
     public function index()
     {
-        //
+        $aportes = Aporte::orderBy('id','ASC')->paginate(5);
+
+        return view('administrador.aporte.index')->with('aportes',$aportes);
     }
 
     /**
@@ -26,7 +31,8 @@ class AportesController extends Controller
      */
     public function create()
     {
-        return view('admins.aporte.create');
+        $categorias = Categoria::orderBy('nombre','ASC')->lists('nombre','id');
+        return view('administrador.aporte.create')->with('categorias', $categorias);
     }
 
     /**
@@ -37,7 +43,14 @@ class AportesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $aporte = new Aporte($request->all());
+        $aporte->usuario_id = '1';
+        
+        $aporte->save();
+        
+        Flash::success("Se ha creado el aporte ".$aporte->nombre." de forma exitosa!");
+
+        return redirect()->route('admin.aportes.index');
     }
 
     /**
@@ -59,7 +72,13 @@ class AportesController extends Controller
      */
     public function edit($id)
     {
-        //
+        $categorias = Categoria::orderBy('nombre','ASC')->lists('nombre','id');
+
+        $aporte = Aporte::find($id);
+        
+        return view('administrador.aporte.edit')
+                ->with('categorias', $categorias)
+                ->with('aporte', $aporte);
     }
 
     /**
@@ -71,7 +90,14 @@ class AportesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $aporte = Aporte::find($id);
+        $aporte->fill($request->all());
+        $aporte->usuario_id = '1';
+        
+        $aporte->save();
+
+        Flash::warning('El aporte ' . $aporte->nombre . 'ha sido modificado con exito!');
+        return redirect()->route('admin.aportes.index');
     }
 
     /**
@@ -82,6 +108,10 @@ class AportesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $aporte = Aporte::find($id);
+        $aporte->delete();
+
+        Flash::error('El aporte '.$aporte->nombre.' a sido borrado de forma existosa!');
+        return redirect()->route('admin.aportes.index');
     }
 }

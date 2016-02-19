@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Laracasts\Flash\Flash;
+use App\Parametro;
 
 class ParametrosController extends Controller
 {
@@ -26,7 +28,7 @@ class ParametrosController extends Controller
      */
     public function create()
     {
-        return view('admins.parametro.create');
+        return view('administrador.parametro.create');
     }
 
     /**

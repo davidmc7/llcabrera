@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Laracasts\Flash\Flash;
 
 class AporteSociosController extends Controller
 {
@@ -26,7 +27,7 @@ class AporteSociosController extends Controller
      */
     public function create()
     {
-        return view('admins.aportesocio.create');
+        return view('administrador.aportesocio.create');
     }
 
     /**
@@ -37,7 +38,7 @@ class AporteSociosController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        echo "No se q hacer xq es una relacion de muchos a muchos";
     }
 
     /**

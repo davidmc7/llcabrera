@@ -6,6 +6,11 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Laracasts\Flash\Flash;
+use App\Categoria;
+use App\Agua;
+use App\Alcantarillado;
+use App\Socio;
 
 class SociosController extends Controller
 {
@@ -16,7 +21,9 @@ class SociosController extends Controller
      */
     public function index()
     {
-        //
+        $socios = Socio::orderBy('id','ASC')->paginate(5);
+
+        return view('usuario.socio.index')->with('socios',$socios);
     }
 
     /**
@@ -26,7 +33,11 @@ class SociosController extends Controller
      */
     public function create()
     {
-        return view('users.socio.create');
+        $categorias = Categoria::orderBy('nombre','ASC')->lists('nombre','id');
+        
+        return view('usuario.socio.create')
+                ->with('categorias', $categorias);
+
     }
 
     /**
@@ -36,8 +47,33 @@ class SociosController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        //
+    {   
+        $agua = new Agua($request->all());
+        $agua->usuario_id = 1;
+        $agua->estado = '1';
+        $agua->save();
+
+        $alcantarillado = new Alcantarillado($request->all());
+        $alcantarillado->usuario_id = 1;
+        $alcantarillado->save();
+
+        $socio = new Socio($request->all());
+        $socio->usuario_id = 1;
+        $socio->codigoSocio = 'AB-CD-12-B';
+        //$socio->fecNac = $datosSocio->fecNac;
+        $socio->nombre = strtoupper($socio->nombre);
+        $socio->apellidoP = strtoupper($socio->apellidoP);
+        $socio->apellidoM = strtoupper($socio->apellidoM);
+        $socio->estado = '1';
+        
+        
+        $socio->agua()->associate($agua);
+        $socio->alcantarillado()->associate($alcantarillado);
+
+        $socio->save();
+
+        Flash::success("Se ha creado la cuenta ".$socio->login." de forma exitosa!");
+        return redirect()->route('user.socios.index');
     }
 
     /**
@@ -58,8 +94,14 @@ class SociosController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
-    {
-        //
+    {   
+        $categorias = Categoria::orderBy('nombre','ASC')->lists('nombre','id');
+
+        $socio = Socio::find($id);
+
+        return view('usuario.socio.edit')
+                ->with('socio',$socio)
+                ->with('categorias', $categorias);
     }
 
     /**
@@ -71,7 +113,23 @@ class SociosController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $socio = Socio::find($id);
+        $socio->fill($request->all());
+        $socio->nombre = strtoupper($request->nombre);
+        $socio->apellidoP = strtoupper($request->apellidoP);
+        $socio->apellidoM = strtoupper($request->apellidoM);
+        $socio->save();
+
+        $agua = Agua::find($socio->agua_id);
+        $agua->fill($request->all());
+        $agua->save();
+
+        $alcantarillado = Alcantarillado::find($socio->alcantarillado_id);
+        $alcantarillado->fill($request->all());
+        $alcantarillado->save();
+
+        Flash::warning('El socio ' . $socio->login . 'ha sido modificado con exito!');
+        return redirect()->route('user.socios.index');
     }
 
     /**
@@ -82,6 +140,10 @@ class SociosController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $socio = Socio::find($id);
+        $socio->delete();
+
+        Flash::error('El socio '.$socio->login.' a sido borrado de forma existosa!');
+        return redirect()->route('user.socios.index');
     }
 }

@@ -13,37 +13,40 @@ class Usuario extends Model
     * belongsTo('App\Category') //para llaves foraneas de la objeto
     * hasMany('App\Image')   //para la llave q se encuentra en otra objeto
     **/
-
-
-    public function usuario(){
-    	return this->belongsTo('App\Usuario');
-    }
-
+    
     public function aguas(){
-    	return this->hasMany('App\Agua');;
+        return $this->hasMany('App\Agua');;
     }
 
     public function alcantarillados(){
-    	return this->hasMany('App\Alcantarillado');
+        return $this->hasMany('App\Alcantarillado');
     }
 
     public function aportes(){
-        return this->hasMany('App\Aporte');
+        return $this->hasMany('App\Aporte');
     }
 
     public function lecturas(){
-        return this->hasMany('App\Lectura');
+        return $this->hasMany('App\Lectura');
     }
 
     public function socios(){
-        return this->hasMany('App\Socio');
+        return $this->hasMany('App\Socio');
     }
 
     public function tarifas(){
-        return this->hasMany('App\Tarifa');
+        return $this->hasMany('App\Tarifa');
     }
 
-    public function tipoSocios(){
-        return this->hasMany('App\TipoSocio');
+    public function comisiones(){
+        return $this->hasMany('App\Comision');
+    }
+
+    public function categorias(){
+        return $this->hasMany('App\Categoria');
+    }
+
+    public function parametros(){
+        return $this->hasMany('App\Parametro');
     }
 }

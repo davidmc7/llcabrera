@@ -13,14 +13,14 @@ class AddSociosTable extends Migration
     public function up()
     {
         Schema::create('socios', function (Blueprint $table) {
-            $table->increments('idSocio');
-            $table->integer('idUsuario')->unsigned();
-            $table->integer('idTipoSocio')->unsigned();
-            $table->integer('idAgua')->unsigned();
-            $table->integer('idAlcantarillado')->unsigned();
+            $table->increments('id');
+            $table->integer('usuario_id')->unsigned();
+            $table->integer('categoria_id')->unsigned();
+            $table->integer('agua_id')->unsigned();
+            $table->integer('alcantarillado_id')->unsigned();
             
-            $table->char('codigoSocio',10);
-            $table->string('ci',20);
+            $table->char('codigoSocio',10)->unique();
+            $table->string('ci',20)->unique();
             $table->string('ciExpedido',20);
             $table->date('fecNac');
             $table->string('nombre',50);
@@ -40,13 +40,13 @@ class AddSociosTable extends Migration
             $table->string('conexiones',10);
             $table->string('personas',10);
             $table->string('familias',10);
-            $table->char('estado',1)->default('0');
+            $table->char('estado',1)->default('1');
             $table->timestamps();
 
-            $table->foreign('idUsuario')->references('idUsuario')->on('usuarios')->onDelete('cascade');
-            $table->foreign('idTipoSocio')->references('idTipoSocio')->on('tiposocios')->onDelete('cascade');
-            $table->foreign('idAgua')->references('idAgua')->on('aguas')->onDelete('cascade');
-            $table->foreign('idAlcantarillado')->references('idAlcantarillado')->on('alcantarillados')->onDelete('cascade');
+            $table->foreign('usuario_id')->references('id')->on('usuarios')->onDelete('cascade');
+            $table->foreign('categoria_id')->references('id')->on('categorias')->onDelete('cascade');
+            $table->foreign('agua_id')->references('id')->on('aguas')->onDelete('cascade');
+            $table->foreign('alcantarillado_id')->references('id')->on('alcantarillados')->onDelete('cascade');
         });
     }
 

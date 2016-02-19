@@ -7,23 +7,39 @@ use Illuminate\Database\Eloquent\Model;
 class Lectura extends Model
 {
     protected $table = "lecturas";
-    protected $fillable = ['idUsuario', 'idSocio', 'idTarifa','mes', 'anio', 'lectura', 'estado'];
+    protected $fillable = ['usuario_id', 'socio_id', 'tarifa_id','mes', 'anio', 'lectura', 'estado'];
 
     /**
     * belongsTo('App\Category') //para llaves foraneas de la objeto
-    * hasMany('App\Image')   //para la llave q se encuentra en otra objeto
+    * hasMany('App\Image')   //para la llave q se encuentra en otro objeto
     **/
 
 
     public function usuario(){
-    	return this->belongsTo('App\Usuario');
+    	return $this->belongsTo('App\Usuario');
     }
 
     public function socio(){
-    	return this->belongsTo('App\Socio');
+    	return $this->belongsTo('App\Socio');
     }
 
     public function tarifa(){
-    	return this->belongsTo('App\Tarifa');
+    	return $this->belongsTo('App\Tarifa');
+    }
+
+    public function scopeBuscarSocioLecturasAnteriores($query, $socio_id){
+        $query
+            ->where('estado', '=', '0')
+            ->where('socio_id', '=', $socio_id);
+
+        return $query;
+    }
+
+    public function scopeBuscarSocioLecturasActuales($query, $socio_id){
+        $query
+            ->where('estado', '=', '1')
+            ->where('socio_id', '=', $socio_id);
+
+        return $query;
     }
 }

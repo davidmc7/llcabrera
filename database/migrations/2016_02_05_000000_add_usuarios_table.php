@@ -13,8 +13,9 @@ class AddUsuariosTable extends Migration
     public function up()
     {
         Schema::create('usuarios', function (Blueprint $table) {
-            $table->increments('idUsuario');
-            $table->string('login',20);
+            $table->increments('id');
+            
+            $table->string('login',20)->unique();
             $table->string('password',120);
             $table->enum('tipo',['USUARIO','ADMINISTRADOR'])->default('USUARIO');
             $table->string('nombre',50);
