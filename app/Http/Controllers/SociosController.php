@@ -14,6 +14,16 @@ use App\Socio;
 
 class SociosController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+
+        $this->departamentos = array('Cochabamba' => 'Cochabamba', 'Oruro' => 'Oruro', 'Potosi' => 'Potosi', 'La Paz' => 'La Paz', 'Santa Cruz' => 'Santa Cruz', 'Beni' => 'Beni', 'Pando' => 'Pando', 'Tarija' => 'Tarija', 'Chuquisaca' => 'Chuquisaca');
+        $this->genero = array('Masculino' => 'Masculino', 'Femenino' => 'Femenino');
+        $this->estadoCivil = array('Soltero' => 'Soltero', 'Soltera' => 'Soltera', 'Casado' => 'Casado', 'Casada' => 'Casada', 'Viudo' => 'Viudo', 'Viuda' => 'Viuda');
+        $this->profesion = array('Alba&ntilde;il' => 'Alba&ntilde;il');
+        $this->tipoResponsable = array('Propietario' => 'Propietario', 'Inquilino' => 'Inquilino', 'Entidad Publica o Privada' => 'Entidad Publica o Privada', 'Otro' => 'Otro');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -36,6 +46,11 @@ class SociosController extends Controller
         $categorias = Categoria::orderBy('nombre','ASC')->lists('nombre','id');
         
         return view('usuario.socio.create')
+                ->with('departamentos', $this->departamentos)
+                ->with('genero', $this->genero)
+                ->with('estadoCivil', $this->estadoCivil)
+                ->with('profesion', $this->profesion)
+                ->with('tipoResponsable', $this->tipoResponsable)
                 ->with('categorias', $categorias);
 
     }
@@ -100,6 +115,11 @@ class SociosController extends Controller
         $socio = Socio::find($id);
 
         return view('usuario.socio.edit')
+                ->with('departamentos', $this->departamentos)
+                ->with('genero', $this->genero)
+                ->with('estadoCivil', $this->estadoCivil)
+                ->with('profesion', $this->profesion)
+                ->with('tipoResponsable', $this->tipoResponsable)
                 ->with('socio',$socio)
                 ->with('categorias', $categorias);
     }

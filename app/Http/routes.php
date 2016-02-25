@@ -11,52 +11,72 @@
 |
 */
 
-Route::get('/', function () { return view('login');});
-Route::get('login', function () { return view('login');});
 
-Route::group(['prefix' => 'admin'],function(){
+
+Route::group(['middleware' => 'web'], function(){
+
+	Route::get('/',function(){
+		return view('login');
+	})->name('inicio');
+
+	Route::get('/dashboard', [
+		'uses' 			=> 'UsuariosController@getDashboard',
+		'as'			=> 'dashboard',
+		'middleware' 	=> 'auth'
+	]);
+
+	Route::post('/login', [
+		'uses'  => 'UsuariosController@postLogin',
+		'as'	=> 'login'
+	]);
+
+	Route::get('/logout', [
+		'uses'  => 'UsuariosController@getLogout',
+		'as'	=> 'logout'
+	]);
+
 	Route::resource('usuarios','UsuariosController');
 	Route::resource('categorias','CategoriasController');
-	Route::resource('tarifas','TarifasController');
+	Route::resource('multas','MultasController');
 	Route::resource('comisiones','ComisionesController');
 	
 	Route::resource('aportesocios','AporteSociosController');
 	Route::resource('aportes','AportesController');
 	
 	
-	Route::get('usuarios/{id}/destroy',[
+	Route::get('/usuarios/{id}/destroy',[
 		'uses' => 'UsuariosController@destroy',
 		'as'   => 'admin.usuarios.destroy'
 	]);
-	Route::get('aportes/{id}/destroy',[
-		'uses' => 'AportesController@destroy',
-		'as'   => 'admin.aportes.destroy'
-	]);
-	Route::get('categorias/{id}/destroy',[
+
+	Route::get('/categorias/{id}/destroy',[
 		'uses' => 'CategoriasController@destroy',
 		'as'   => 'admin.tiposocios.destroy'
 	]);
-	Route::get('tarifas/{id}/destroy',[
-		'uses' => 'TarifasController@destroy',
-		'as'   => 'admin.tarifas.destroy'
+
+	Route::get('/multas/{id}/destroy',[
+		'uses' => 'MultasController@destroy',
+		'as'   => 'admin.multas.destroy'
 	]);
 
-	Route::get('comisiones/{id}/destroy',[
+	Route::get('/aportes/{id}/destroy',[
+		'uses' => 'AportesController@destroy',
+		'as'   => 'admin.aportes.destroy'
+	]);
+	
+	Route::get('/comisiones/{id}/destroy',[
 		'uses' => 'ComisionesController@destroy',
 		'as'   => 'admin.comisiones.destroy'
-	]);
+	]); 
 
-	Route::get('principal','PagesController@principal');
-	Route::get('parametros','ParametrosController@principal');
+	Route::get('/parametros','ParametrosController@principal');
 
-});
 
-Route::group(['prefix' => 'user'],function(){
-	Route::resource('socios','SociosController');
-	Route::resource('lecturas','LecturasController');
-	Route::resource('cobros','CobrosController');
+	Route::resource('socios', 'SociosController');
+	Route::resource('lecturas', 'LecturasController');
+	Route::resource('cobros', 'CobrosController');
 	
-	Route::get('socios/{id}/destroy',[
+	Route::get('/socios/{id}/destroy', [
 		'uses' => 'SociosController@destroy',
 		'as'   => 'user.socios.destroy'
 	]);

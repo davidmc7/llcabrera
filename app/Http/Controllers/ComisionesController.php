@@ -6,11 +6,17 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Laracasts\Flash\Flash;
 use App\Categoria;
 use App\Comision;
 
 class ComisionesController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->estado = array('1' => 'Activado', '0' => 'Desactivado');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -20,7 +26,9 @@ class ComisionesController extends Controller
     {
         $comisiones = Comision::orderBy('id','ASC')->paginate(5);
 
-        return view('administrador.comision.index')->with('comisiones',$comisiones);
+        return view('administrador.comision.index')
+                ->with('estado',$this->estado)
+                ->with('comisiones',$comisiones);
     }
 
     /**
@@ -32,7 +40,9 @@ class ComisionesController extends Controller
     {
         $categorias = Categoria::orderBy('nombre','ASC')->lists('nombre','id');
 
-        return view('administrador.comision.create')->with('categorias', $categorias);
+        return view('administrador.comision.create')
+                ->with('estado',$this->estado)
+                ->with('categorias', $categorias);
     }
 
     /**
@@ -76,6 +86,7 @@ class ComisionesController extends Controller
         $categorias = Categoria::orderBy('nombre','ASC')->lists('nombre','id');
 
         return view('administrador.comision.edit')
+                ->with('estado',$this->estado)
                 ->with('categorias',$categorias)
                 ->with('comision',$comision);
     }

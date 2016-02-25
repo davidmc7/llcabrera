@@ -2,10 +2,13 @@
 
 namespace App;
 
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 
-class Usuario extends Model
+class Usuario extends Model implements Authenticatable
 {
+    use \Illuminate\Auth\Authenticatable;
+
     protected $table = "usuarios";
     protected $fillable = ['login', 'password', 'tipo', 'nombre', 'apellidoP', 'apellidoM', 'ci', 'ciExpedido', 'telefono', 'celular', 'email', 'foto', 'direccion'];
 
@@ -13,29 +16,17 @@ class Usuario extends Model
     * belongsTo('App\Category') //para llaves foraneas de la objeto
     * hasMany('App\Image')   //para la llave q se encuentra en otra objeto
     **/
-    
-    public function aguas(){
-        return $this->hasMany('App\Agua');;
-    }
-
-    public function alcantarillados(){
-        return $this->hasMany('App\Alcantarillado');
-    }
 
     public function aportes(){
         return $this->hasMany('App\Aporte');
-    }
-
-    public function lecturas(){
-        return $this->hasMany('App\Lectura');
     }
 
     public function socios(){
         return $this->hasMany('App\Socio');
     }
 
-    public function tarifas(){
-        return $this->hasMany('App\Tarifa');
+    public function lecturas(){
+        return $this->hasMany('App\Lectura');
     }
 
     public function comisiones(){
@@ -46,7 +37,15 @@ class Usuario extends Model
         return $this->hasMany('App\Categoria');
     }
 
-    public function parametros(){
-        return $this->hasMany('App\Parametro');
+    public function multas(){
+        return $this->hasMany('App\multa');
+    }
+
+    public function ingresos(){
+        return $this->hasMany('App\ingreso');
+    }
+
+    public function sistema(){
+        return $this->hasMany('App\sistema');
     }
 }

@@ -2,16 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
-use Laracasts\Flash\Flash;
 use App\Usuario;
+use Laracasts\Flash\Flash;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+/*use App\Http\Requests;
+use App\Http\Controllers\Controller;*/
 
 class UsuariosController extends Controller
 {
-    /**
+    public function __construct()
+    {
+        $this->middleware('auth', ['only' => 'index', 'create', 'store', 'edit', 'update']);
+        $this->tipos = array('Administrador' => 'Administrador', 'Usuario' => 'Usuario');
+        $this->departamentos = array('Cochabamba' => 'Cochabamba', 'La Paz' => 'La Paz');
+    }
+
+    /*protected $redirectTo = '/dashboard';*/
+
+        /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -19,8 +30,7 @@ class UsuariosController extends Controller
     public function index()
     {
         $usuarios = Usuario::orderBy('id','ASC')->paginate(5);
-
-        return view('administrador.usuario.index')->with('usuarios',$usuarios);
+        return view('usuario.index')->with('usuarios',$usuarios);
     }
 
     /**
@@ -30,7 +40,7 @@ class UsuariosController extends Controller
      */
     public function create()
     {
-        return view('administrador.usuario.create');
+        return view('usuario.create')->with(['tipos' => $this->tipos, 'departamentos' => $this->departamentos]);
     }
 
     /**
@@ -52,7 +62,7 @@ class UsuariosController extends Controller
         
         Flash::success("Se ha creado la cuenta ".$usuario->login." de forma exitosa!");
 
-        return redirect()->route('admin.usuarios.index');
+        return redirect()->route('usuarios.index');
     }
 
     /**
@@ -75,7 +85,10 @@ class UsuariosController extends Controller
     public function edit($id)
     {
         $usuario = Usuario::find($id);
-        return view('administrador.usuario.edit')->with('usuario',$usuario);
+        return view('usuario.edit')
+                ->with('tipos', $this->tipos)
+                ->with('departamentos', $this->departamentos)
+                ->with('usuario',$usuario);
     }
 
     /**
@@ -88,22 +101,14 @@ class UsuariosController extends Controller
     public function update(Request $request, $id)
     {
         $usuario = Usuario::find($id);
-        //$user->fill($request->all());
-        $usuario->login = $request->login;
-        $usuario->nombre = $request->nombre;
-        $usuario->apellidoP = $request->apellidoP;
-        $usuario->apellidoM = $request->apellidoM;
-        $usuario->ci = $request->ci;
-        $usuario->ciExpedido = $request->ciExpedido;
-        $usuario->email = $request->email;
-        $usuario->telefono = $request->telefono;
-        $usuario->celular = $request->celular;
-        $usuario->direccion = $request->direccion;
-        $usuario->tipo = $request->tipo;
+        $usuario->fill($request->all());
+        $usuario->nombre = strtoupper($request->nombre);
+        $usuario->apellidoP = strtoupper($request->apellidoP);
+        $usuario->apellidoM = strtoupper($request->apellidoM);
         $usuario->save();
 
-        Flash::warning('El usuario ' . $usuario->login . 'ha sido modificado con exito!');
-        return redirect()->route('admin.usuarios.index');
+        Flash::warning('El usuario ' . $usuario->login . ' ha sido modificado con exito!');
+        return redirect()->route('usuarios.index');
     }
 
     /**
@@ -117,7 +122,31 @@ class UsuariosController extends Controller
         $usuario = Usuario::find($id);
         $usuario->delete();
 
-        Flash::error('El usuario '.$usuario->login.' a sido borrado de forma existosa!');
-        return redirect()->route('admin.usuarios.index');
+        Flash::error('El usuario '.$usuario->login.' ha sido borrado de forma existosa!');
+        return redirect()->route('usuarios.index');
+    }
+    
+    /* Metodos para manejar el home */
+
+    public function getDashboard()
+    {
+        return view('dashboard');
+    }
+
+    public function postLogin(Request $request)
+    {
+        if( Auth::attempt(['login' => $request->login, 'password' => $request->password ], true)) {// el true para recordar en la maquina
+
+            //dd(Auth::user());
+            return redirect()->route('dashboard');
+
+        }
+        return redirect()->back();
+    }
+
+    public function getLogout()
+    {
+        Auth::logout();
+        return redirect()->route('inicio');
     }
 }

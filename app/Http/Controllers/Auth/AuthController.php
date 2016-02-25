@@ -28,7 +28,8 @@ class AuthController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/administrador/ztemplate/principal';
+    protected $loginPath = '/login';
 
     /**
      * Create a new authentication controller instance.
@@ -68,5 +69,16 @@ class AuthController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
+    }
+
+    protected function showLoginForm(){
+        $view = property_exists($this, 'login')
+                    ? $this->loginView : 'auth.authenticate';
+
+        if (view()->exists($view)) {
+            return view($view);
+        }
+
+        return view('login');
     }
 }

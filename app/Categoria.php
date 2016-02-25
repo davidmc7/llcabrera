@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Categoria extends Model
 {
     protected $table = "categorias";
-    protected $fillable = ['usuario_id', 'nombre', 'descripcion'];
+    protected $fillable = ['usuario_id', 'nombre', 'monto', 'montoMinimo', 'mesesRetraso', 'descripcion'];
 
     /**
     * belongsTo('App\Category') //para llaves foraneas de la objeto
@@ -21,5 +21,9 @@ class Categoria extends Model
 
     public function socios(){
     	return $this->hasMany('App\Socio');
+    }
+
+    public function comisiones(){
+        return $this->hasMany('App\Comision');
     }
 }

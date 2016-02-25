@@ -30,6 +30,11 @@ class Socio extends Model
     public function alcantarillado(){
         return $this->belongsTo('App\Alcantarillado');
     }
+
+    public function lecturas(){
+        return $this->hasMany('App\lectura');
+    }
+
     public function aportes(){
         return $this->belongsToMany('App\Aporte');
     }

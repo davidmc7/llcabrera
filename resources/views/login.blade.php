@@ -11,35 +11,37 @@
 		<div class="row"><div class="col-xs-12">&nbsp;</div></div>
 	
 		<div class="row navbar navbar-default">
-			<h1 class="text text-center"><a href="..." class="">INICIO</a></h1>
+			<h1 class="text text-center"><a href="#" class="">INICIO</a></h1>
 		</div>
 	</div>
 	<div class="container">
 	    <div class="row">
 	        <div class="col-md-4 col-md-offset-4">
-	            <h3 class="sign-up-title text-center login-title">Inicia sesi&oacute;n para continuar</h3>
-	            <div class="account-wall">
-					
+	            <h3 class="text-center">Iniciar sesi&oacute;n</h3>
+				{!! Form::open(['route' => 'login', 'method' => 'POST']) !!} 
+					<div class="form-group">
+						{!! Form::label('cuenta', 'Cuenta') !!}
+						{!! Form::text('login',null,['class' => 'form-control', 'placeholder' => 'login', 'required', 'autofocus']) !!}
+					</div>
 
-					<form class="form-signin">
-						{!! Form::text('user',null,['class' => 'form-control', 'placeholder' => 'usuario', 'required', 'autofocus']) !!}
+					<div class="form-group">
+						{!! Form::label('contrasenia', 'Contrase&ntilde;a') !!}
+						{!! Form::password('password',['class' => 'form-control', 'placeholder' => '***********', 'required']) !!}
+					</div>
 
-						{!! Form::password('password',['class' => 'form-control', 'placeholder' => 'Contrase&ntilde;a', 'required']) !!}
+					<!-- <div class="form-group">
+						{!! Form::checkbox('session', 1, null, ['class' => '']) !!}
+						{!! Form::label('session', 'No cerrar sesi&oacute;n') !!}
+					</div> -->
 
+					<div class="form-group">
 						{!! Form::submit('Iniciar Sesi&oacute;n',['class' => 'btn btn-lg btn-success btn-block']) !!}
-						
-						<label class="checkbox">
-							<input class="" type="checkbox" name="sessioned" value="">
-							No cerrar sesi&oacute;n
-						</label>
+						{{ Form::hidden('_token', Session::token()) }}
+					</div>
 
-
-						<a href="#" class="pull-right forgot-password">¿Olvisdaste tu contrase&ntilde;a?</a>
-					</form>
-
-
-
-				</div>
+					<!-- <a href="#" class="pull-right forgot-password">¿Olvisdaste tu contrase&ntilde;a?</a> -->
+				
+				{!! Form::close() !!}
 			</div>
 		</div>
 	</div>

@@ -11,6 +11,11 @@ use App\Categoria;
 
 class CategoriasController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -46,7 +51,7 @@ class CategoriasController extends Controller
         
         $categoria->save();
         
-        Flash::success("Se ha creado el tipo socio ".$categoria->nombre." de forma exitosa!");
+        Flash::success("Se ha creado la categoria ".$categoria->nombre." de forma exitosa!");
 
         return redirect()->route('admin.categorias.index');
     }
@@ -84,12 +89,12 @@ class CategoriasController extends Controller
     public function update(Request $request, $id)
     {
         $categoria = Categoria::find($id);
-        $user->fill($request->all());
+        $categoria->fill($request->all());
         $categoria->usuario_id = '1';
         
         $categoria->save();
 
-        Flash::warning('El tipo socio ' . $categoria->nombre . 'ha sido modificado con exito!');
+        Flash::warning('La categoria ' . $categoria->nombre . 'ha sido modificado con exito!');
         return redirect()->route('admin.categorias.index');
     }
 
@@ -104,7 +109,7 @@ class CategoriasController extends Controller
         $categoria = Categoria::find($id);
         $categoria->delete();
 
-        Flash::error('El tipo socio '.$categoria->nombre.' a sido borrado de forma existosa!');
+        Flash::error('La categoria '.$categoria->nombre.' a sido borrado de forma existosa!');
         return redirect()->route('admin.categorias.index');
     }
 }

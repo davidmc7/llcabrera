@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Lectura extends Model
 {
     protected $table = "lecturas";
-    protected $fillable = ['usuario_id', 'socio_id', 'tarifa_id','mes', 'anio', 'lectura', 'estado'];
+    protected $fillable = ['usuario_id', 'socio_id','mes', 'anio', 'lectura', 'estado'];
 
     /**
     * belongsTo('App\Category') //para llaves foraneas de la objeto
@@ -23,10 +23,6 @@ class Lectura extends Model
     	return $this->belongsTo('App\Socio');
     }
 
-    public function tarifa(){
-    	return $this->belongsTo('App\Tarifa');
-    }
-
     public function scopeBuscarSocioLecturasAnteriores($query, $socio_id){
         $query
             ->where('estado', '=', '0')
@@ -38,7 +34,9 @@ class Lectura extends Model
     public function scopeBuscarSocioLecturasActuales($query, $socio_id){
         $query
             ->where('estado', '=', '1')
-            ->where('socio_id', '=', $socio_id);
+            ->where('socio_id', '=', $socio_id)
+            ->orderBy('mes','asc')
+            ->orderBy('anio','asc');
 
         return $query;
     }
